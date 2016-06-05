@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="admin/fragments/conferenceDetails :: head"></head>
+<body>
+	<div th:include="admin/fragments/conferenceDetails"></div>
+
+	<div class="content" style="padding: 30px;">
+		<div class="innercontent" style="text-align:left;">
+
+			<div id="users">
+				<button class="sort" data-sort="id">Sort by ID</button>
+				<button class="sort" data-sort="email">Sort by email</button>
+				<button class="sort" data-sort="name">Sort by name</button>
+				<button class="sort" data-sort="country">Sort by country</button>
+				<button class="sort" data-sort="signed">Sort Signed on</button>
+				<input class="search" placeholder="Search" />
+				<table>
+					<thead>
+						<th>ID</th>
+						<th>Email</th>
+						<th>Name</th>
+						<th>Country</th>
+						<th>Signed on</th>
+					</thead>
+					<tbody class="list">
+						<tr style="cursor: hand; cursor: pointer;" th:each="user,it : ${users}" th:onclick="'document.location = \'user?userid='+ ${user.userId} +'\';'">
+							<td class="id" th:text="${user.userId}"></td>
+							<td class="email" th:text="${user.email}"></td>
+							<td class="name" th:text="${user.userInfo.firstName + ' ' +user.userInfo.lastName}"></td>
+							<td class="country" th:text="${user.userInfo.country}"></td>
+							<td class="signed" th:text="${user.getSignedTime()}"></td>
+						</tr>
+					</tbody>
+				</table>
+
+			</div>
+			<script src="http://listjs.com/no-cdn/list.js"></script>
+			<script>
+				var options = {
+					valueNames : [ 'id', 'email', 'name', 'country', 'signed' ]
+				};
+
+				var userList = new List('users', options);
+			</script>
+			<div style="margin-bottom: 100px;"></div>
+		</div>
+	</div>
+
+
+</body>
+</html>

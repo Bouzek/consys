@@ -1,0 +1,368 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<link rel="stylesheet" href="../../css/styles.css" />
+<title>AKI 2016</title>
+
+<script>
+	var name = "";
+	var surname = "";
+	
+	function updateSelectorPrice(selector, targetId) {
+		document.getElementById(targetId).innerHTML = selector.options[selector.selectedIndex].getAttribute("price") + " Kč";
+		document.getElementById(targetId).setAttribute("price", selector.options[selector.selectedIndex].getAttribute("price"));
+		updateSumPrice();
+	}
+	function updateCheckboxPrice(checkbox, targetId) {
+		if(document.getElementById(targetId) == null){
+			updateSumPrice();
+			return;
+		}
+		if(checkbox.checked == true){
+			document.getElementById(targetId).setAttribute("price", checkbox.getAttribute("price"));
+		}else{
+			document.getElementById(targetId).setAttribute("price", 0);
+		}
+		updateSumPrice();
+	}
+	function updateSumPrice(){
+		var elements = document.getElementsByName("priceVal");
+		var price = 0;
+		for(var i=0; elements.length > i; i++) {
+		    price += Number(elements[i].getAttribute("price"));
+		}
+		document.getElementById("priceSum").innerHTML = price + " Kč";
+	}
+	function duplicateTextField(source, target){
+		document.getElementById(target).value = source.value;
+	}
+	
+	function updateSurname(sur){
+		surname = sur.value;
+		document.getElementById("billingAddressForm.name").value = name + " " + surname;
+	}
+	function updateName(nm){
+		name = nm.value;
+		document.getElementById("billingAddressForm.name").value = name + " " + surname;
+	}
+	function updateInstitution(inst){
+		value 
+	}
+	
+</script>
+</head>
+<body>
+	<form class="mainBox" action=""  method="post">
+		<header>Přihláška na konferenci AKI 2016</header>
+		<fieldset class="info">Zadejte své osobní a kontaktní údaje a zvolte z nabízených možností, jakou formou se konference AKI zúčastníte a pro jaké dny si přejete zarezervovat ubytování. <br />Pokud předpokládáte aktivní účast formou přednášky nebo posteru (pouze pro studenty BSP a MSP), vyplňte název Vašeho příspěvku.<br />Na základě uvedených údajů Vám bude vystavena zálohová faktura, která Vám bude odeslána na uvedenou e-mailovou adresu. Vaše registrace bude potvrzena po připsaní poplatku na účet AKI.</fieldset>
+		<fieldset>
+			<div class="row">
+				<section class="col col-6">
+					<label
+						th:class="${#fields.hasErrors('aioform.personalDataForm.firstName')}? 'input state-error' : 'input'">
+						<i class="icon-prepend icon-user"></i> <input type="text" onchange="updateName(this);"
+						placeholder="Jméno" th:field="${aioform.personalDataForm.firstName}" />
+						<b class="tooltip tooltip-top-left">Potřebné</b>
+					</label>
+					<div class="note note-error"
+						th:each="err : ${#fields.errors('aioform.personalDataForm.firstName')}"
+						th:text="${err}"></div>
+				</section>
+				<section class="col col-6">
+					<label
+						th:class="${#fields.hasErrors('aioform.personalDataForm.surname')}? 'input state-error' : 'input'">
+						<i class="icon-prepend icon-user"></i> <input type="text" onchange="updateSurname(this);"
+						name="surname" th:field="${aioform.personalDataForm.surname}"
+						placeholder="Příjmení" /> <b class="tooltip tooltip-top-left">Potřebné</b>
+					</label>
+					<div class="note note-error"
+						th:each="err : ${#fields.errors('aioform.personalDataForm.surname')}"
+						th:text="${err}"></div>
+				</section>
+			</div>
+
+			<div class="row">
+				<section class="col col-6">
+					<label class="input"> <i
+						class="icon-prepend icon-certificate"></i> <input type="text"
+						placeholder="Titul(y)" th:field="${aioform.personalDataForm.degree}" /> <b
+						class="tooltip tooltip-top-left">Volitelné</b>
+					</label>
+				</section>
+				<section class="col col-6">
+					<label
+						th:class="${#fields.hasErrors('aioform.personalDataForm.email')}? 'input state-error' : 'input'">
+						<i class="icon-prepend icon-envelope-alt"></i> <input type="email"
+						placeholder="E-mail" th:field="${aioform.personalDataForm.email}" /> <b
+						class="tooltip tooltip-top-left">Potřebné</b>
+					</label>
+					<div class="note note-error"
+						th:each="err : ${#fields.errors('aioform.personalDataForm.email')}"
+						th:text="${err}"></div>
+				</section>
+			</div>
+		</fieldset>
+		<fieldset>
+			<section>
+				<label
+					th:class="${#fields.hasErrors('aioform.personalDataForm.university')}? 'input state-error' : 'input'">
+					<i class="icon-prepend icon-briefcase"></i> <input type="text"
+					placeholder="Instituce" onchange="duplicateTextField(this, &#34;billingAddressForm.institution&#34;);"
+					th:field="${aioform.personalDataForm.university}" /> <b
+					class="tooltip tooltip-top-left">Potřebné</b>
+				</label>
+				<div class="note note-error"
+					th:each="err : ${#fields.errors('aioform.personalDataForm.university')}"
+					th:text="${err}"></div>
+			</section>
+			<section>
+				<label class="input"> <input type="text"
+					placeholder="Oddělení" th:field="${aioform.personalDataForm.division}" />
+					<b class="tooltip tooltip-top-left">Volitelné</b>
+				</label>
+			</section>
+			<div class="row">
+				<section class="col col-6">
+					<label
+						th:class="${#fields.hasErrors('aioform.personalDataForm.country')}? 'select state-error' : 'select'">
+						<select th:field="${aioform.personalDataForm.country}" onchange="duplicateTextField(this, &#34;billingAddressForm.country&#34;);">
+							<option value="Česká republika">Česká republika</option>
+							<option value="Slovenská republika">Slovenská republika</option>
+					</select> <i></i>
+					</label>
+					<div class="note note-error"
+						th:each="err : ${#fields.errors('aioform.personalDataForm.country')}"
+						th:text="${err}"></div>
+				</section>
+				<section class="col col-6">
+					<label
+						th:class="${#fields.hasErrors('aioform.personalDataForm.city')}? 'input state-error' : 'input'">
+						<input onchange="duplicateTextField(this, &#34;billingAddressForm.city&#34;);" type="text" name="city" th:field="${aioform.personalDataForm.city}"
+						placeholder="Město" /> <b class="tooltip tooltip-top-left">Potřebné</b>
+					</label>
+					<div class="note note-error"
+						th:each="err : ${#fields.errors('aioform.personalDataForm.city')}"
+						th:text="${err}"></div>
+				</section>
+			</div>
+			<div class="row">
+				<section class="col col-6">
+					<label
+						th:class="${#fields.hasErrors('aioform.personalDataForm.street')}? 'input state-error' : 'input'">
+						<input type="text" placeholder="Ulice" onchange="duplicateTextField(this, &#34;billingAddressForm.street&#34;);"
+						th:field="${aioform.personalDataForm.street}" /> <b
+						class="tooltip tooltip-top-left">Potřebné</b>
+					</label>
+					<div class="note note-error"
+						th:each="err : ${#fields.errors('aioform.personalDataForm.street')}"
+						th:text="${err}"></div>
+				</section>
+				<section class="col col-6">
+					<label
+						th:class="${#fields.hasErrors('aioform.personalDataForm.zip')}? 'input state-error' : 'input'">
+						<input type="text" name="zip" th:field="${aioform.personalDataForm.zip}" onchange="duplicateTextField(this, &#34;billingAddressForm.zip&#34;);"
+						placeholder="PSČ" /> <b class="tooltip tooltip-top-left">Potřebné</b>
+					</label>
+					<div class="note note-error"
+						th:each="err : ${#fields.errors('aioform.personalDataForm.zip')}"
+						th:text="${err}"></div>
+				</section>
+			</div>
+		</fieldset>
+		<!-- 
+		<fieldset class="info">
+			 Another really useful information right here.
+		</fieldset>
+		 -->
+		<fieldset>
+		<div class="row" th:each="field,it : ${aioform.registrationForm.fields}">
+		<section class="col col-12">
+		<label class="label" th:if="${field.isHeader()}" th:text="${field.header}"> </label>
+		
+		<!-- SELECTOR -->
+		<span th:if="${field.getType()=='selector'}">
+		<label class="select wid70"> 
+		<select th:field="${aioform.registrationForm.selectors[__${it.index}__].selectedId}" th:onchange="'updateSelectorPrice(this, &#34;selectorPrice'+${it.index}+'&#34; )'" ><option th:each="selection, i : ${aioform.registrationForm.selectors[__${it.index}__].selections}" th:attr="price=${aioform.registrationForm.selectors[__${it.index}__].selections[__${i.index}__].price}" th:value="${aioform.registrationForm.selectors[__${it.index}__].selections[__${i.index}__].id}" th:text="${aioform.registrationForm.selectors[__${it.index}__].selections[__${i.index}__].text}"></option></select> <i></i>
+		</label> 
+		<label  name="priceVal" class="textTwo wid35" th:id="'selectorPrice'+${it.index}" th:attr="price=${aioform.registrationForm.selectors[__${it.index}__].getSelectedPrice()}" th:text="${aioform.registrationForm.selectors[__${it.index}__].getSelectedPrice() + ' Kč'}" ></label>					
+					
+		</span>
+		<!-- /SELECTOR -->
+		
+		<!-- CHECKBOX -->
+		<span th:if="${field.getType()=='checkbox'}">
+			<label class="checkbox wid70"><input th:attr="price=${aioform.registrationForm.checkboxes[__${it.index}__].price}"  th:onchange="'updateCheckboxPrice(this, &#34;checkboxPrice'+${it.index}+'&#34; )'" type="checkbox"  th:value="${aioform.registrationForm.checkboxes[__${it.index}__].id}" th:field="${aioform.registrationForm.checkboxes[__${it.index}__].checked}"  th:text="${aioform.registrationForm.checkboxes[__${it.index}__].text}" /><i class="checkboxi"></i></label>
+			<label name="priceVal"  th:if="${aioform.registrationForm.checkboxes[__${it.index}__].price > 0}" th:attr="price=${aioform.registrationForm.checkboxes[__${it.index}__].getSelectedPrice()}" th:id="'checkboxPrice'+${it.index}" class="textTwo wid30" th:text="${aioform.registrationForm.checkboxes[__${it.index}__].price}+' Kč'" ></label>
+		</span>
+		<!-- /CHECKBOX -->
+		
+		<!-- MESSAGE -->
+					<span th:if="${field.getType()=='message'}"> <label
+						class="textarea"> <i></i> <textarea
+								th:field="${aioform.registrationForm.messages[__${it.index}__].message}"
+								th:rows="${aioform.registrationForm.messages[__${it.index}__].rows}" th:inline="text">[[${aioform.registrationForm.messages[__${it.index}__].message}]]</textarea>
+					</label>
+					</span>
+		<!-- /MESSAGE -->
+		
+		</section>
+		</div>
+		</fieldset>
+		<!-- 
+		<div class="row">
+				<section class="col col-12">
+					<span th:each="FormSelector,it : ${aioform.registrationForm.selectors}"> 
+					<label class="label" th:if="${FormSelector.header != null}" th:text="${FormSelector.header}"> </label>
+					<label class="select wid70"> 
+					<select th:field="${aioform.registrationForm.selectors[__${it.index}__].selectedId}" th:onchange="'updateSelectorPrice(this, &#34;selectorPrice'+${it.index}+'&#34; )'" ><option th:each="selection, i : ${aioform.registrationForm.selectors[__${it.index}__].selections}" th:attr="price=${aioform.registrationForm.selectors[__${it.index}__].selections[__${i.index}__].price}" th:value="${aioform.registrationForm.selectors[__${it.index}__].selections[__${i.index}__].id}" th:text="${aioform.registrationForm.selectors[__${it.index}__].selections[__${i.index}__].text}"></option></select> <i></i>
+					</label> 
+					<label  name="priceVal" class="textTwo wid35" th:id="'selectorPrice'+${it.index}" th:attr="price=${aioform.registrationForm.selectors[__${it.index}__].getSelectedPrice()}" th:text="${aioform.registrationForm.selectors[__${it.index}__].getSelectedPrice() + ' Kč'}" ></label>					
+					</span>
+				</section>
+			</div>
+		
+			<section style="width:100%">
+				<span th:each="checkbox,it : ${aioform.registrationForm.checkboxes}"> 
+				<label class="label" th:if="${checkbox.header != null}" th:text="${checkbox.header}" style="margin-top:12px;"> </label>
+				<label class="checkbox wid70"><input th:attr="price=${checkbox.price}"  th:onchange="'updateCheckboxPrice(this, &#34;checkboxPrice'+${it.index}+'&#34; )'" type="checkbox"  th:value="${aioform.registrationForm.checkboxes[__${it.index}__].id}" th:field="${aioform.registrationForm.checkboxes[__${it.index}__].checked}"  th:text="${checkbox.text}" /><i class="checkboxi"></i></label>
+				<label name="priceVal"  th:if="${checkbox.price > 0}" th:attr="price=${checkbox.getSelectedPrice()}" th:id="'checkboxPrice'+${it.index}" class="textTwo wid30" th:text="${checkbox.price}+' Kč'" ></label>
+				</span>
+			</section>
+			
+			<div class="row">
+				<section class="col col-12">
+					<span th:each="message,it : ${aioform.registrationForm.messages}"> <label
+						class="label" th:text="${message.header}"></label> <label
+						class="textarea"> <i></i> <textarea th:field="${aioform.registrationForm.messages[__${it.index}__].message}" th:rows="${message.rows}" th:inline="text">[[${message.message}]]</textarea>
+					</label>
+					</span>
+				</section>
+			</div>
+		</fieldset>-->
+		<fieldset class="infoBig">
+		<label class="wid50left">
+		Celkem:
+		</label>
+		<label id="priceSum" class="wid50right">
+		0 Kč
+		</label>
+		</fieldset>
+		<fieldset class="infoBig">
+		Fakturační adresa:
+		</fieldset>
+		<fieldset>
+		<div id="hidableBillingAddress">
+		
+		<section>
+					<label
+						th:class="${#fields.hasErrors('aioform.billingAddressForm.institution')}? 'input state-error' : 'input'">
+						<i></i> <input type="text"
+						placeholder="Instituce" th:field="${aioform.billingAddressForm.institution}" />
+					</label>
+					<div class="note note-error"
+						th:each="err : ${#fields.errors('aioform.billingAddressForm.institution')}"
+						th:text="${err}"></div>
+				</section>
+		
+		
+				<section>
+					<label
+						th:class="${#fields.hasErrors('aioform.billingAddressForm.name')}? 'input state-error' : 'input'">
+						<i></i> <input type="text"
+						placeholder="Jméno" th:field="${aioform.billingAddressForm.name}" />
+						<b class="tooltip tooltip-top-left">Potřebné</b>
+					</label>
+					<div class="note note-error"
+						th:each="err : ${#fields.errors('aioform.billingAddressForm.name')}"
+						th:text="${err}"></div>
+				</section>
+		
+		
+		
+		<div class="row">
+				<section class="col col-6">
+					<label
+						th:class="${#fields.hasErrors('aioform.billingAddressForm.country')}? 'select state-error' : 'select'">
+						<select th:field="${aioform.billingAddressForm.country}">
+							<option value="Česká republika">Česká republika</option>
+							<option value="Slovenská republika">Slovenská republika</option>
+					</select> <i></i>
+					</label>
+					<div class="note note-error"
+						th:each="err : ${#fields.errors('aioform.billingAddressForm.country')}"
+						th:text="${err}"></div>
+				</section>
+				<section class="col col-6">
+					<label
+						th:class="${#fields.hasErrors('aioform.billingAddressForm.city')}? 'input state-error' : 'input'">
+						<input type="text" name="city" th:field="${aioform.billingAddressForm.city}"
+						placeholder="Město" /> <b class="tooltip tooltip-top-left">Potřebné</b>
+					</label>
+					<div class="note note-error"
+						th:each="err : ${#fields.errors('aioform.billingAddressForm.city')}"
+						th:text="${err}"></div>
+				</section>
+		</div>
+		
+			<div class="row">
+				<section class="col col-6">
+					<label
+						th:class="${#fields.hasErrors('aioform.billingAddressForm.street')}? 'input state-error' : 'input'">
+						<input type="text" placeholder="Ulice"
+						th:field="${aioform.billingAddressForm.street}" /> <b
+						class="tooltip tooltip-top-left">Potřebné</b>
+					</label>
+					<div class="note note-error"
+						th:each="err : ${#fields.errors('aioform.billingAddressForm.street')}"
+						th:text="${err}"></div>
+				</section>
+				<section class="col col-6">
+					<label
+						th:class="${#fields.hasErrors('aioform.billingAddressForm.zip')}? 'input state-error' : 'input'">
+						<input type="text" name="zip" th:field="${aioform.billingAddressForm.zip}"
+						placeholder="PSČ" /> <b class="tooltip tooltip-top-left">Potřebné</b>
+					</label>
+					<div class="note note-error"
+						th:each="err : ${#fields.errors('aioform.billingAddressForm.zip')}"
+						th:text="${err}"></div>
+				</section>
+			</div>
+			</div>
+			<div class="row">
+				<section class="col col-6">
+					<label
+						th:class="${#fields.hasErrors('aioform.billingAddressForm.IN')}? 'input state-error' : 'input'">
+						<input type="text" placeholder="IČ"
+						th:field="${aioform.billingAddressForm.IN}" /> <b
+						class="tooltip tooltip-top-left">Volitelné</b>
+					</label>
+					<div class="note note-error"
+						th:each="err : ${#fields.errors('aioform.billingAddressForm.IN')}"
+						th:text="${err}"></div>
+				</section>
+				<section class="col col-6">
+					<label
+						th:class="${#fields.hasErrors('aioform.billingAddressForm.TIN')}? 'input state-error' : 'input'">
+						<input type="text" name="zip" th:field="${aioform.billingAddressForm.TIN}"
+						placeholder="DIČ" /> <b class="tooltip tooltip-top-left">Volitelné</b>
+					</label>
+					<div class="note note-error"
+						th:each="err : ${#fields.errors('aioform.billingAddressForm.TIN')}"
+						th:text="${err}"></div>
+				</section>
+			</div>
+			
+		
+		</fieldset>
+		<footer>
+			<input class="button" type="submit" value="Odeslat" />
+		</footer>
+
+	</form>
+</body>
+<script>
+	updateSumPrice();
+</script>
+</html>
+

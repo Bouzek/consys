@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+</head>
+<body>
+
+	<div th:text="${conference.name}"></div>
+	<hr />
+
+	<div>
+		Vaše registrace byla přijata. Děkujeme Vám. <br /> Zasíláme Vám
+		přehledné shrnutí registračních údajů a informace o platbě.
+	</div>
+	<hr />
+	<div>Osobní údaje:</div>
+	<div>
+		Titul: <span th:text="${aioform.personalDataForm.degree}"></span><br />
+		Jméno: <span th:text="${aioform.personalDataForm.firstName}"></span><br />
+		Příjmení: <span th:text="${aioform.personalDataForm.surname}"></span><br />
+		Instituce: <span th:text="${aioform.personalDataForm.university}"></span><br />
+		Oddělení: <span th:text="${aioform.personalDataForm.division}"></span><br />
+		Země: <span th:text="${aioform.personalDataForm.country}"></span><br />
+		Ulice: <span th:text="${aioform.personalDataForm.street}"></span><br />
+		Město: <span th:text="${aioform.personalDataForm.city}"></span><br />
+		PSČ: <span th:text="${aioform.personalDataForm.zip}"></span><br />
+	</div>
+	<hr />
+	<div>Informace:</div>
+	<div>
+		<div th:each="info : ${userRegistration.infos}">
+			<span th:text="${info.name} + '  ' + ${info.value}"> </span>
+		</div>
+	</div>
+	<hr />
+	<div>Placené položky:</div>
+	<div>
+		<div th:each="item : ${invoice.items}">
+			<span th:text="${item.name}+' - '+${item.price} + ' Kč'"> </span>
+		</div>
+	</div>
+	<hr />
+	<div>Platba:</div>
+	<div>
+		Celkem k úhradě: <span th:text="${invoice.getTotal()}"></span> Kč
+	</div>
+	
+	<hr />
+	<div>Faktura:</div>
+	<div>
+		<div>
+			<a th:href="${invoicelink}" >Faktura ke stažení zde.</a>
+		</div>
+	</div>
+	
+</body>
+</html>

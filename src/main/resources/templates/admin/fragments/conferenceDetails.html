@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head th:fragment="head">
+<meta charset="UTF-8" />
+<title>Concrea administrator</title>
+<link rel="stylesheet" href="../../css/adminstyles.css" />
+
+<link rel='stylesheet prefetch'
+	href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900|RobotoDraft:400,100,300,500,700,900' />
+</head>
+
+<body>
+
+	<div th:fragment="header">
+		<ul>
+			<li><a href="/admin/conferences">Conferences</a></li>
+			<li><a th:class="${isOverview}? active : inactive" href="overview"
+				th:text="${conference.name}"></a></li>
+			<li><a th:class="${isSettings}? active : inactive" href="settings">Settings</a></li>
+			<li><a th:class="${isUsers}? active : inactive" href="users">Users</a></li>
+			<li><a th:class="${isPapers}? active : inactive" href="papers">Papers</a></li>
+			<li><a th:class="${isInvoices}? active : inactive" href="invoices">Invoices</a></li>
+		</ul>
+	</div>
+
+
+
+	<div class="content">
+		<div class="innercontent"></div>
+	</div>
+
+
+
+
+</body>
+</html>

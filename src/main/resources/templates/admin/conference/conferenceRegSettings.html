@@ -1,0 +1,204 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="admin/fragments/conferenceDetails :: head"></head>
+<body>
+	<div th:include="admin/fragments/conferenceDetails :: header"></div>
+	<ul class="ul2">
+		<li><a href="settings">Conference</a></li>
+		<li><a class="active" href="regsettings">Registration</a></li>
+	</ul>
+
+	<div class="content" style="margin-top: 100px;">
+		<div class="innercontent">
+
+			<div th:if="${!isRegistration}" class="module form-module bigform"
+				style="margin: 35px; display: inline-block;">
+				<h2>Registration is inactive</h2>
+				<a href="?activate" class="button2">Set active</a>
+			</div>
+
+
+			<div th:if="${isRegistration}" class="module form-module bigform"
+				style="margin: 35px; display: inline-block;">
+				<h2>Registration is active</h2>
+
+				<a href="?deactivate" class="button2">Set inactive</a>
+			</div>
+			<br />
+			<div class="module form-module bigform"
+				style="margin: 35px; display: inline-block;">
+				<h2>Registration form fields</h2>
+				<div class="infotable">
+					<div th:each="field,it : ${regFields}">
+						<hr th:unless="${it.index==0}" />
+						<div class="inforow">
+							<span class="infocell"> <span
+								th:text="${it.index + 1}+'.'"> </span> <a
+								th:unless="${it.index==0}" th:href="'?upfield='+${it.index}">Up</a>
+								<a th:unless="${it.index == regFields.size() - 1}"
+								th:href="'?downfield='+${it.index}">Down</a></span> <span
+								class="infocell right"><a
+								th:href="'?delfield='+${field.fieldid}">Delete</a></span>
+						</div>
+						<div class="inforow">
+							<span class="infocell">Type:</span> <span class="infocell"
+								th:text="${field.type.name()}"> </span>
+						</div>
+						<div class="inforow">
+							<span class="infocell">Header:</span> <span class="infocell"
+								th:text="${field.header}"> </span>
+						</div>
+						<div class="inforow">
+							<span class="infocell">Text:</span> <span class="infocell"
+								th:text="${field.text}"> </span>
+						</div>
+						
+						<div class="inforow">
+							<span class="infocell">Invoice description:</span> <span class="infocell"
+								th:text="${field.invoiceDescription}"> </span>
+						</div>
+						
+						
+						<div class="inforow">
+							<span class="infocell">Description:</span> <span class="infocell"
+								th:text="${field.longDescription}"> </span>
+						</div>
+
+
+						<div th:if="${field.type.name() == 'SELECTOR'}" class="inforow">
+							<span class="infocell">Subfields:</span> <span class="infocell"
+									th:text="${field.subfields.size()}"> </span>
+									
+							<div th:if="${field.subfields.size() > 0}" class="inforow">
+									<a href="#" th:onclick="'javascript:showSubFields(\'subfieldsfor' + ${field.fieldid} + '\');this.style.display = \'none\'; '">Show</a>
+									
+							</div>
+							
+							<div th:id="${'subfieldsfor'+field.fieldid}" style="display:none;">
+							<div style="margin-left:15px;margin-top:20px;" th:each="subfield,sit : ${field.subfields}">
+								<div class="inforow">
+									<span class="infocell"> <span
+										th:text="${sit.index + 1}+'. Subfield'"> </span> <a
+										th:unless="${sit.index==0}" th:href="'?upsubfield='+${subfield.id}">Up</a>
+										<a th:unless="${sit.index == field.subfields.size() - 1}"
+										th:href="'?downsubfield='+${subfield.id}">Down</a></span> <span
+										class="infocell right"><a
+										th:href="'?delsubfield='+${subfield.id}">Delete</a></span>
+								</div>
+								<div class="inforow">
+									<span class="infocell">Text:</span> <span class="infocell"
+										th:text="${subfield.text}"> </span>
+								</div>
+								<div class="inforow">
+									<span class="infocell">Price:</span> <span class="infocell"
+										th:text="${subfield.price}"> </span>
+								</div>
+
+							</div>
+							</div>
+							
+							<div class="inforow">
+									<a href="#" th:onclick="'javascript:showNewSubField(\'newsubfieldfor' + ${field.fieldid} + '\');this.style.display = \'none\'; '">Add new</a>
+									
+							</div>
+
+							<form th:id="${'newsubfieldfor'+field.fieldid}" action="#" th:action="${'?addsubfield='+field.fieldid}" method="post" style="display:none;">
+								<div class="inforow">
+									<input th:field="${newsubfield.description}" type="text"
+										placeholder="Description" />
+								</div>
+								<div class="inforow">
+									<input th:field="${newsubfield.text}" type="text"
+										placeholder="Field text" />
+								</div>
+								<div class="inforow">
+									<input th:field="${newsubfield.price}" type="number"
+										placeholder="Price" value="" />
+								</div>
+								<div class="inforow">
+									<input th:field="${newsubfield.invoiceDescription}" type="text"
+										placeholder="Invoice description" />
+								</div>
+								<input type="submit" class="button2" value="Add subfield" />
+							</form>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+			<script>
+				function showNewSubField(fieldId){
+					document.getElementById(fieldId).style.display = 'block';
+				}
+				function showSubFields(fieldId){
+					document.getElementById(fieldId).style.display = 'block';
+				}
+			</script>
+			<form action="#" th:action="@{?addfield}" th:object="${newfield}"
+				method="post">
+				<div class="module form-module bigform"
+					style="margin: 35px; display: inline-block;">
+					<h2>Add form field</h2>
+					<div class="infotable">
+						<div class="inforow">
+							<select th:field="${newfield.type}">
+								<option th:each="type,it : ${fieldtypes}"
+									th:value="${type.name()}" th:text="${type.name()}">default
+									- rekni petikovi</option>
+							</select>
+						</div>
+						<div class="inforow">
+							<input th:field="${newfield.header}" type="text"
+								placeholder="Header (optional)" />
+						</div>
+						<div class="inforow">
+							<input th:field="${newfield.text}" type="text"
+								placeholder="Field text" />
+						</div>
+						<div class="inforow">
+							<input th:field="${newfield.price}" type="number"
+								placeholder="Price" value="" />
+						</div>
+						<script th:inline="javascript">
+							/*<![CDATA[*/
+							var elements = document.getElementsByName("price");
+							for (var i = 0; i < elements.length; i++) {
+								if (elements[i].value == 0) {
+									elements[i].value = '';
+								}
+							}
+							/*]]>*/
+						</script>
+						<div class="inforow">
+							<input th:field="${newfield.longDescription}" type="text"
+								placeholder="Description" />
+						</div>
+						<div class="inforow">
+							<input th:field="${newfield.invoiceDescription}" type="text"
+								placeholder="Invoice description" />
+						</div>
+						<div class="inforow">
+							<input th:field="${newfield.size}" type="number"
+								placeholder="Size (messages only)" value="" />
+						</div>
+						<script>
+							if (document.getElementById('size').value == 0) {
+								document.getElementById('size').value = '';
+							}
+						</script>
+					</div>
+
+					<input type="submit" class="button2" value="Add field" />
+				</div>
+			</form>
+
+
+			<div style="margin-bottom: 100px;"></div>
+		</div>
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+<meta charset="UTF-8" />
+<title>Concrea administrator access</title>
+<link rel="stylesheet" href="../css/adminstyles.css" />
+
+<link rel='stylesheet prefetch'
+	href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900|RobotoDraft:400,100,300,500,700,900' />
+</head>
+
+
+<body>
+	<form action="/admin/login" method="post">
+		<div class="outer">
+			<div class="middle">
+				<div class="inner">
+					<div class="module form-module">
+						<h2>Administrator access</h2>
+						<h2 th:if="${param.error}" class="error">Access denied</h2>
+						<div class="form" style="display: block">
+
+							<input name="username" type="text" placeholder="Username" /> <input
+								name="password" type="password" placeholder="Password" />
+						</div>
+						<input type="submit" class="button1" value="Log In" /> <input
+							type="hidden" name="${_csrf.parameterName}"
+							value="${_csrf.token}" />
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</body>
+</html>

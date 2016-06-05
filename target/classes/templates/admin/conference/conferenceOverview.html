@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="admin/fragments/conferenceDetails :: head"></head>
+<body>
+	<div th:include="admin/fragments/conferenceDetails :: header"></div>
+	<div class="content">
+		<div class="innercontent">
+
+
+
+			<div class="module form-module"
+				style="margin: 35px; display: inline-block;">
+				<h2>Users</h2>
+				<div class="infotable">
+					<div class="inforow">
+						<span class="infocell"> Count: </span> <span
+							class="infocell right"
+							th:text="${users.GetUserCount(__${conference.id}__)}">
+							3589 </span>
+					</div>
+					<div class="inforow">
+						<span class="infocell"> Today: </span> <span
+							class="infocell right"
+							th:text="${users.GetUserCountToday(__${conference.id}__)}">
+							3589 </span>
+					</div>
+				</div>
+
+				<a class="button2">Manage</a>
+			</div>
+
+			<div class="module form-module"
+				style="margin: 35px; display: inline-block;">
+				<h2>Papers</h2>
+				<div class="infotable">
+					<div class="inforow">
+						<span class="infocell"> Count: </span> <span
+							class="infocell right" th:text="0"> 3589 </span>
+					</div>
+				</div>
+
+				<a class="button2">Manage</a>
+			</div>
+
+			<div class="module form-module"
+				style="margin: 35px; display: inline-block;">
+				<h2>Invoices</h2>
+				<div class="infotable">
+					<div class="inforow">
+						<span class="infocell"> Count: </span> <span
+							class="infocell right"
+							th:text="${invoices.GetConferenceInvoiceCount(__${conference.id}__)}">
+							3589 </span>
+					</div>
+				</div>
+
+				<a class="button2">Manage</a>
+			</div>
+
+
+			<div class="module form-module"
+				style="margin: 35px; display: inline-block;">
+				<h2>Registrations</h2>
+				<div th:if="${registrations.hasRegSettings(__${conference.id}__)}"
+					class="infotable">
+					<div class="inforow">
+						<span class="infocell"> Count: </span> <span
+							class="infocell right"
+							th:text="${registrations.getRegistrationsCount(__${conference.id}__)}">
+							3589 </span>
+					</div>
+					<div class="inforow">
+						<span class="infocell"> Today: </span> <span
+							class="infocell right"
+							th:text="${registrations.getRegistrationsCountToday(__${conference.id}__)}">
+							3589 </span>
+					</div>
+				</div>
+				<div th:if="${!registrations.hasRegSettings(__${conference.id}__)}"
+					class="infotable">
+					<div class="inforow">Registration inactive</div>
+				</div>
+				<a class="button2">Manage</a>
+			</div>
+
+			<div class="module form-module"
+				style="margin: 35px; display: inline-block;">
+				<h2>Accommodation bookings</h2>
+				<div class="infotable"></div>
+
+				<a class="button2">Manage</a>
+			</div>
+			<div style="margin-bottom: 100px;"></div>
+		</div>
+	</div>
+
+
+
+
+</body>
+</html>
